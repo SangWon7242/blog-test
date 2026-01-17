@@ -25,9 +25,13 @@ public class SecurityConfig {
   public SecurityFilterChain baseSecurityFilterChain(HttpSecurity http) throws Exception {
     http
         .authorizeHttpRequests(authorize -> authorize
+            // 웹 페이지 및 정적 리소스에 대한 접근 허용
+            .requestMatchers("/", "/index", "/home", "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico").permitAll()
+            // API 관련 규칙 (기존 유지)
             .requestMatchers(HttpMethod.GET, "/api/*/posts/{id:\\d+}").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/*/posts").permitAll()
             .requestMatchers("/api/*/**").authenticated()
+            // 위에 명시되지 않은 다른 모든 요청 허용 (Thymeleaf 페이지 등)
             .anyRequest().permitAll())
         .headers(headers -> headers
             .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
