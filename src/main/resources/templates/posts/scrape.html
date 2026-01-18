@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scraped Data</title>
+    <!-- Tailwind CSS CDN (빠른 테스트용, 실제 프로젝트에서는 빌드 프로세스를 통해 설정) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-4">
+    <div class="container mx-auto bg-white shadow-lg rounded-lg p-6 max-w-4xl">
+        <h1 class="text-3xl font-bold mb-6 text-gray-800 text-center">Scraped Data from Naver News</h1>
+
+        <div th:if="${errorMessage}" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+            <strong class="font-bold">Error!</strong>
+            <span class="block sm:inline" th:text="${errorMessage}"></span>
+        </div>
+
+        <div class="space-y-6"> <!-- 각 뉴스 항목 간 간격 조정 -->
+            <div th:each="item : ${scrapedItems}" class="p-5 bg-gray-50 rounded-lg shadow-sm hover:bg-gray-100 transition-colors duration-200">
+                <a th:href="${item.url}" target="_blank" class="block text-blue-700 hover:underline mb-2">
+                    <h2 class="text-xl font-semibold text-gray-800" th:text="${item.title}"></h2>
+                </a>
+                <p class="text-gray-600 text-sm mb-3" th:text="${item.summary}"></p>
+                <div class="flex flex-wrap items-center justify-between text-xs text-gray-500">
+                    <span class="font-medium" th:text="${item.press}"></span>
+                    <span th:text="${item.datetime}"></span>
+                </div>
+            </div>
+            <div th:if="${scrapedItems.isEmpty() and !errorMessage}" class="text-center text-gray-600 py-8">
+                <p>스크래핑된 데이터가 없습니다.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

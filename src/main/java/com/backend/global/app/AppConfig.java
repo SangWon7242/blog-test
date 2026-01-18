@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.reactive.function.client.WebClient; // WebClient 임포트
+import org.springframework.web.client.RestClient; // RestClient 임포트
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -92,9 +92,9 @@ public class AppConfig {
     return genFileDirPath;
   }
 
-  // WebClient Bean 추가 (RestClient 대신)
+  // RestClient Bean 추가
   @Bean
-  public WebClient webClient() {
-    return WebClient.builder().build();
+  public RestClient restClient() {
+    return RestClient.create();
   }
 }

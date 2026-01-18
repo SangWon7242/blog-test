@@ -36,7 +36,7 @@ cd spring-boot-stater
 
 ## 외부 API 호출 및 사용법
 
-이 프로젝트는 `WebClient`를 사용하여 외부 JSON API를 호출하고, 그 데이터를 Thymeleaf 템플릿을 통해 웹 페이지에 표시하는 예제를 포함하고 있습니다. `WebClient`는 Spring WebFlux의 일부로, 비동기적이고 논블로킹 방식으로 HTTP 요청을 처리할 수 있는 강력한 클라이언트입니다.
+이 프로젝트는 `RestClient`를 사용하여 외부 JSON API를 호출하고, 그 데이터를 Thymeleaf 템플릿을 통해 웹 페이지에 표시하는 예제를 포함하고 있습니다. `RestClient`는 Spring Framework 6부터 도입된 최신 HTTP 클라이언트로, `RestTemplate`보다 더 현대적이고 유연한 API를 제공합니다.
 
 ### 1. Todo DTO (Data Transfer Object)
 
@@ -62,49 +62,36 @@ cd spring-boot-stater
     }
     ```
 
-### 2. WebClient 의존성 추가
+### 2. RestClient Bean 설정
 
-`WebClient`를 사용하려면 `build.gradle.kts` 파일에 `spring-boot-starter-webflux` 의존성을 추가해야 합니다.
-
-*   **경로**: `build.gradle.kts`
-*   **추가된 코드**:
-    ```kotlin
-    dependencies {
-        // ... 기존 의존성 ...
-        implementation("org.springframework.boot:spring-boot-starter-webflux") // WebClient 사용을 위한 의존성 추가
-    }
-    ```
-
-### 3. WebClient Bean 설정
-
-`WebClient`는 Spring에서 제공하는 HTTP 클라이언트로, 외부 API를 호출하는 데 사용됩니다. 이 객체는 Spring 컨테이너에 빈으로 등록되어야 합니다.
+`RestClient`는 Spring에서 제공하는 HTTP 클라이언트로, 외부 API를 호출하는 데 사용됩니다. 이 객체는 Spring 컨테이너에 빈으로 등록되어야 합니다.
 
 *   **경로**: `src/main/java/com/backend/global/app/AppConfig.java`
 *   **추가된 코드**:
     ```java
     import org.springframework.context.annotation.Bean;
-    import org.springframework.web.reactive.function.client.WebClient;
+    import org.springframework.web.client.RestClient;
 
     @Configuration
     public class AppConfig {
         // ... 기존 코드 ...
 
         @Bean
-        public WebClient webClient() {
-            return WebClient.builder().build();
+        public RestClient restClient() {
+            return RestClient.create();
         }
     }
     ```
 
-### 4. PostController에서 API 호출 (WebClient 사용)
+### 3. PostController에서 API 호출 (RestClient 사용)
 
-`PostController`는 `WebClient`를 주입받아 `jsonplaceholder.typicode.com/todos` API를 호출하고, 가져온 데이터를 Thymeleaf 템플릿으로 전달합니다.
+`PostController`는 `RestClient`를 주입받아 `jsonplaceholder.typicode.com/todos` API를 호출하고, 가져온 데이터를 Thymeleaf 템플릿으로 전달합니다.
 
 *   **경로**: `src/main/java/com/backend/domain/post/post/controller/PostController.java`
 *   **관련 메서드**:
     ```java
     import com.backend.domain.post.post.dto.Todo;
-    import org.springframework.web.reactive.function.client.WebClient;
+    import org.springframework.web.client.RestClient;
     import java.util.Arrays;
     import java.util.List;
 
@@ -113,17 +100,16 @@ cd spring-boot-stater
     @RequiredArgsConstructor
     public class PostController {
       private final PostService postService;
-      private final WebClient webClient; // WebClient 주입
+      private final RestClient restClient; // RestClient 주입
 
       @GetMapping("/list/todos")
       public String getTodos(Model model) {
         String apiUrl = "https://jsonplaceholder.typicode.com/todos";
-        // WebClient를 사용하여 외부 API 호출
-        Todo[] todosArray = webClient.get()
-                                 .uri(apiUrl)
-                                 .retrieve()
-                                 .bodyToMono(Todo[].class) // Mono<Todo[]> 반환
-                                 .block(); // 동기적으로 결과를 기다림 (Thymeleaf 사용 시)
+        // RestClient를 사용하여 외부 API 호출
+        Todo[] todosArray = restClient.get()
+                                  .uri(apiUrl)
+                                  .retrieve()
+                                  .body(Todo[].class);
         List<Todo> todos = Arrays.asList(todosArray);
 
         model.addAttribute("todos", todos); // 모델에 todos 추가
@@ -133,15 +119,63 @@ cd spring-boot-stater
     }
     ```
 
+### 4. Jsoup을 이용한 웹 스크래핑
+
+이 프로젝트는 Jsoup 라이브러리를 사용하여 외부 웹 페이지의 HTML을 파싱하고 특정 데이터를 추출하는 예제도 포함하고 있습니다.
+
+#### 4.1. Jsoup 의존성 추가
+
+Jsoup을 사용하려면 `build.gradle.kts` 파일에 Jsoup 의존성을 추가해야 합니다.
+
+*   **경로**: `build.gradle.kts`
+*   **추가된 코드**:
+    ```kotlin
+    dependencies {
+        // ... 기존 의존성 ...
+        implementation("org.jsoup:jsoup:1.17.2") // Jsoup 의존성 추가
+    }
+    ```
+
+#### 4.2. ScrapedItem DTO (Data Transfer Object)
+
+스크래핑한 뉴스 기사 데이터를 담기 위한 DTO 클래스입니다.
+
+*   **경로**: `src/main/java/com/backend/domain/post/post/dto/ScrapedItem.java`
+*   **구조**:
+    ```java
+    package com.backend.domain.post.post.dto;
+
+    import lombok.AllArgsConstructor;
+    import lombok.Data;
+    import lombok.NoArgsConstructor;
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public class ScrapedItem {
+        private String title;   // 뉴스 타이틀 (sa_text_strong)
+        private String url;     // 링크 (sa_text_title의 href)
+        private String summary; // 요약된 뉴스 기사 (sa_text_lede)
+        private String press;   // 신문사 (sa_text_press)
+        private String datetime; // 시간 (sa_text_datetime)
+    }
+    ```
+
+#### 4.3. PostController에서 Jsoup 스크래핑
+
+`PostController`는 Jsoup을 사용하여 네이버 IT/과학 뉴스 섹션 페이지(`https://news.naver.com/main/main.naver?mode=LSD&mid=shm&sid1=105`)에서 각 뉴스 기사의 상세 정보를 스크래핑하고, 그 결과를 `ScrapedItem` 리스트로 만들어 Thymeleaf 템플릿으로 전달합니다.
+
+*   **경로**: `src/main/java/com/backend/domain/post/post/controller/PostController.java`
+
 ### 5. Thymeleaf 템플릿에서 데이터 표시
 
-`posts/todos.html` 템플릿은 `PostController`에서 전달받은 `todos` 데이터를 사용하여 반응형 그리드 형태로 목록을 표시합니다.
+`posts/todos.html` 및 `posts/scrape.html` 템플릿은 `PostController`에서 전달받은 데이터를 사용하여 반응형 그리드 형태로 목록을 표시합니다.
 
-*   **경로**: `src/main/resources/templates/posts/todos.html`
-*   **접근 URL**: `http://localhost:8080/posts/list/todos` (애플리케이션이 실행 중인 포트에 따라 다를 수 있습니다.)
+*   **`posts/todos.html` 접근 URL**: `http://localhost:8080/posts/list/todos`
+*   **`posts/scrape.html` 접근 URL**: `http://localhost:8080/posts/scrape`
 *   **특징**: Tailwind CSS를 사용하여 모바일과 데스크탑 환경에 따라 다른 레이아웃을 제공하는 반응형 디자인이 적용되어 있습니다. (빠른 테스트를 위해 Tailwind CDN이 포함되어 있습니다.)
 
-이 기능을 통해 외부 API 데이터를 쉽게 가져와 웹 애플리케이션에 통합하는 방법을 이해할 수 있습니다.
+이 기능을 통해 외부 API 데이터를 쉽게 가져와 웹 애플리케이션에 통합하는 방법과 Jsoup을 이용한 웹 스크래핑 방법을 이해할 수 있습니다.
 
 ## 나만의 프로젝트로 만들기
 
