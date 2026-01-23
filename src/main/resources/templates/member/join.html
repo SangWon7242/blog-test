@@ -1,0 +1,84 @@
+<link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입</title>
+</head>
+<body>
+<div>
+    <h1>Sign Up</h1>
+    <fieldset class="fieldset">
+        <legend class="fieldset-legend">ID</legend>
+        <label class="input validator">
+            <!-- 아이콘 -->
+            <svg>...</svg>
+            <!-- 입력창 -->
+            <input
+                    type="text"
+                    placeholder="Enter your ID"
+                    required pattern="[A-Za-z][A-Za-z0-9\-]*"
+                    minlength="3"
+                    maxlength="30"
+                    title="input username"
+                    name="username"
+            />
+        </label>
+        <p class="validator-hint hidden">Check your ID.</p>
+    </fieldset>
+
+    <fieldset class="fieldset">
+        <legend class="fieldset-legend">password</legend>
+        <label class="input validator">
+            <svg>...</svg>
+            <input
+                    type="password"
+                    required placeholder="Enter your Password"
+                    minlength="8"
+                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                    title="input password"
+                    name="password"
+            />
+        </label>
+        <p class="validator-hint hidden">Check your password.</p>
+    </fieldset>
+
+    <fieldset class="fieldset">
+        <legend class="fieldset-legend">비밀번호 확인</legend>
+        <label class="input validator">
+            <svg>...</svg>
+            <input
+                    type="password"
+                    required
+                    placeholder="Password"
+                    minlength="8"
+                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                    title="input passwordConfirm"
+                    name="passwordConfirm"
+            />
+        </label>
+        <p class="validator-hint hidden">비밀번호 확인을 확인 후 입력해주세요.</p>
+    </fieldset>
+
+    <fieldset class="fieldset">
+        <legend class="fieldset-legend">email</legend>
+        <label class="input validator">
+            <svg>...</svg>
+            <input
+                    type="email"
+                    placeholder="Enter your Email"
+                    required name="email"
+            />
+        </label>
+        <div class="validator-hint hidden">Check your email.</div>
+    </fieldset>
+</div>
+<div>
+    <button type="submit" class="btn btn-neutral">Join</button>
+</div>
+
+
+</body>
+</html>
