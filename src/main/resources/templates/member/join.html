@@ -7,10 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원가입</title>
 </head>
-<body>
-<form action="/signup" method="post" class="p-6 space-y-4">
-    <h1 class="text-2xl font-bold">Sign Up</h1>
+<body class="flex items-center justify-center min-h-screen bg-gray-50">
+<form action="/signup" method="post" class="p-6 space-y-4 w-full max-w-md bg-white rounded-lg shadow">
+    <h1 class="text-2xl font-bold text-center">Sign Up</h1>
 
+    <!-- ID -->
     <fieldset class="fieldset">
         <legend class="fieldset-legend">ID</legend>
         <label class="input validator">
@@ -27,37 +28,53 @@
         <p class="validator-hint hidden">Check your ID.</p>
     </fieldset>
 
-
+    <!-- Password -->
     <fieldset class="fieldset">
         <legend class="fieldset-legend">Password</legend>
         <label class="input validator">
-            <input type="password" required placeholder="Enter your Password"
-                   minlength="8"
-                   pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                   name="password" />
+            <input
+                    type="password"
+                    required
+                    placeholder="Enter your Password"
+                    minlength="8"
+                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                    name="password"
+            />
         </label>
         <p class="validator-hint hidden">Check your password.</p>
     </fieldset>
 
+    <!-- Confirm Password -->
     <fieldset class="fieldset">
-        <legend class="fieldset-legend">비밀번호 확인</legend>
+        <legend class="fieldset-legend">Confirm Password</legend>
         <label class="input validator">
-            <input type="password" required placeholder="Confirm Password"
-                   minlength="8"
-                   name="passwordConfirm" />
+            <input
+                    type="password"
+                    required
+                    placeholder="Confirm your Password"
+                    minlength="8"
+                    name="passwordConfirm"
+            />
         </label>
-        <p class="validator-hint hidden">비밀번호 확인을 확인 후 입력해주세요.</p>
+        <p class="validator-hint hidden">Check your confirm password.</p>
     </fieldset>
 
+    <!-- Email -->
     <fieldset class="fieldset">
         <legend class="fieldset-legend">Email</legend>
         <label class="input validator">
-            <input type="email" placeholder="Enter your Email" required name="email" />
+            <input
+                    type="email"
+                    placeholder="Enter your Email"
+                    required
+                    name="email"
+            />
         </label>
         <div class="validator-hint hidden">Check your email.</div>
     </fieldset>
 
-    <button type="submit" class="btn btn-neutral">Join</button>
+    <!-- Submit -->
+    <button type="submit" class="btn btn-neutral w-full">Join</button>
 </form>
 
 <script>
