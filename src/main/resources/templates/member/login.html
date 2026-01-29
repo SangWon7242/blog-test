@@ -1,0 +1,50 @@
+<link href="https://cdn.jsdelivr.net/npm/daisyui@5/dist/full.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원가입</title>
+</head>
+<body class="flex items-center justify-center min-h-screen bg-gray-50">
+<form action="/signup" method="post" class="p-6 space-y-4 w-full max-w-md bg-white rounded-lg shadow">
+  <h1 class="text-2xl font-bold text-center">Sign Up</h1>
+
+  <!-- ID -->
+  <fieldset class="fieldset">
+    <script>
+      function LoginForm__submit(form) {
+        form.username.value = form.username.value.trim();
+        if (form.username.value.length === 0) {
+          alert("아이디를 입력해주세요.");
+          form.username.focus();
+          return false;
+        }
+
+        form.password.value = form.password.value.trim();
+        if (form.password.value.length === 0) {
+          alert("비밀번호를 입력해주세요.");
+          form.password.focus(); return false;
+        }
+
+        return true; // 검증 통과 시 정상 제출
+      }
+    </script>
+
+  <button type="submit" class="btn btn-neutral w-full">Join</button>
+  </form>
+
+<script>
+  const form = document.querySelector("form");
+  form.addEventListener("submit", function(e) {
+    const pw = form.password.value;
+    const pwConfirm = form.passwordConfirm.value;
+    if (pw !== pwConfirm) {
+      e.preventDefault();
+      alert("비밀번호가 일치하지 않습니다.");
+    }
+  });
+</script>
+</body>
+</html>

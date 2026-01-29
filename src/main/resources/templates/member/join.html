@@ -1,7 +1,7 @@
 <link href="https://cdn.jsdelivr.net/npm/daisyui@5/dist/full.css" rel="stylesheet" />
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -25,7 +25,6 @@
                     name="username"
             />
         </label>
-        <p class="validator-hint hidden">Check your ID.</p>
     </fieldset>
 
     <!-- Password -->
@@ -41,7 +40,6 @@
                     name="password"
             />
         </label>
-        <p class="validator-hint hidden">Check your password.</p>
     </fieldset>
 
     <!-- Confirm Password -->
@@ -56,7 +54,6 @@
                     name="passwordConfirm"
             />
         </label>
-        <p class="validator-hint hidden">Check your confirm password.</p>
     </fieldset>
 
     <!-- Email -->
@@ -70,11 +67,25 @@
                     name="email"
             />
         </label>
-        <div class="validator-hint hidden">Check your email.</div>
     </fieldset>
 
     <!-- Submit -->
     <button type="submit" class="btn btn-neutral w-full">Join</button>
+
+    <!-- Divider -->
+    <div class="divider">OR</div>
+
+    <!-- Social Login -->
+    <div class="space-y-2">
+        <a href="/oauth2/authorization/google" class="btn btn-outline w-full">
+            <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5 mr-2" alt="Google"/>
+            Sign up with Google
+        </a>
+        <a href="/oauth2/authorization/kakao" class="btn w-full bg-yellow-400 text-black hover:bg-yellow-500">
+            <img src="https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png" class="w-5 h-5 mr-2" alt="Kakao"/>
+            Sign up with Kakao
+        </a>
+    </div>
 </form>
 
 <script>

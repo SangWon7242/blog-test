@@ -9,4 +9,5 @@ public class MemberJoin {
     String username;
     String password;
     String email;
+    String profileImg;
 }
