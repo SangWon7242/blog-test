@@ -1,12 +1,25 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
-<body>
-    <footer th:fragment="footerFragment">
-        <p>&copy; 2026 My Application. All rights reserved.</p>
-        <!-- 필요에 따라 더 많은 푸터 콘텐츠를 추가하세요 -->
+  <head>
+    <th:block th:fragment="head-extras">
+      <!-- 페이지별 head 요소 (메타 태그, 스타일, 스크립트 등) -->
+    </th:block>
+  </head>
+  <body>
+    <footer
+      class="footer sm:footer-horizontal bg-neutral"
+      th:fragment="footerFragment"
+    >
+      <div class="container mx-auto h-[80px]">
+        <p
+          class="text-white h-full w-full flex items-center justify-center text-xl"
+        >
+          &copy; 2026 My Blog. All rights reserved.
+        </p>
+      </div>
     </footer>
     <th:block th:fragment="body-extras">
-        <!-- 페이지별 body 스크립트 -->
+      <!-- 페이지별 body 스크립트 -->
     </th:block>
-</body>
+  </body>
 </html>

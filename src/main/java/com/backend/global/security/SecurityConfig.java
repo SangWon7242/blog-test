@@ -24,55 +24,36 @@ import com.backend.global.app.AppConfig;
 public class SecurityConfig {
 
   @Bean
-  public SecurityFilterChain baseSecurityFilterChain(HttpSecurity http) throws Exception {
+  public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
         .authorizeHttpRequests(authorize -> authorize
-            // 웹 페이지 및 정적 리소스에 대한 접근 허용
-            .requestMatchers("/", "/index", "/home", "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico").permitAll()
+            // 정적 리소스 및 공용 페이지 허용
+            .requestMatchers("/", "/index", "/home", "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico",
+                "/member/join", "/member/login")
+            .permitAll()
+            // 게시물 리스트 및 상세 페이지 허용 (UI)
+            .requestMatchers(HttpMethod.GET, "/posts/list", "/posts/{id:\\d+}").permitAll()
             // API 관련 규칙 (기존 유지)
             .requestMatchers(HttpMethod.GET, "/api/*/posts/{id:\\d+}").permitAll()
             .requestMatchers(HttpMethod.GET, "/api/*/posts").permitAll()
-            .requestMatchers("/api/*/**").authenticated()
-            // 위에 명시되지 않은 다른 모든 요청 허용 (Thymeleaf 페이지 등)
-            .anyRequest().permitAll())
+            // 그 외 모든 요청은 인증 필요
+            .anyRequest().authenticated())
         .headers(headers -> headers
             .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
-        .csrf(AbstractHttpConfigurer::disable)
-        .formLogin(AbstractHttpConfigurer::disable)
+        .csrf(AbstractHttpConfigurer::disable) // 상황에 따라 활성화 권장
+        .formLogin(form -> form
+            .loginPage("/member/login")
+            .loginProcessingUrl("/member/login")
+            .defaultSuccessUrl("/")
+            .permitAll())
+        .logout(logout -> logout
+            .logoutUrl("/member/logout")
+            .logoutSuccessUrl("/")
+            .permitAll())
         .sessionManagement(session -> session
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .cors(cors -> cors.configurationSource(corsConfigurationSource()));
-
-
-    return http.build();
-  }
-
-  @Bean
-  public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
-    http
-        .authorizeHttpRequests(authorize -> authorize
-                .requestMatchers("/", "/index", "/home", "/css/**", "/js/**", "/images/**", "/webjars/**", "/favicon.ico").permitAll()
-                .requestMatchers("/", "/member/join").permitAll()
-                .requestMatchers("/css/**", "/js/**").permitAll()
-
-                .requestMatchers(HttpMethod.GET, "/api/*/posts/{id:\\d+}").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/*/posts").permitAll()
-                .requestMatchers("/api/*/**").authenticated()
-                .anyRequest().authenticated()
+            .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // 타임리프(UI) 방식은 세션 활용
         )
-            .headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
-            .csrf(AbstractHttpConfigurer::disable)
-            .formLogin(form -> form
-                    .loginPage("/member/login")
-                    .loginProcessingUrl("/member/login")
-                    .defaultSuccessUrl("/")
-                    .permitAll()
-            )
-            .logout(logout -> logout
-                    .logoutUrl("/member/logout")
-                    .logoutSuccessUrl("/")
-            )
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()));
+        .cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
     return http.build();
   }

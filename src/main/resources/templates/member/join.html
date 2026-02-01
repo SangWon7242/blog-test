@@ -1,103 +1,148 @@
-<link href="https://cdn.jsdelivr.net/npm/daisyui@5/dist/full.css" rel="stylesheet" />
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!doctype html>
+<html
+  lang="ko"
+  xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{layouts/default_layout :: layout(~{::title}, ~{::section})}"
+>
+  <head>
     <title>회원가입</title>
-</head>
-<body class="flex items-center justify-center min-h-screen bg-gray-50">
-<form action="/signup" method="post" class="p-6 space-y-4 w-full max-w-md bg-white rounded-lg shadow">
-    <h1 class="text-2xl font-bold text-center">Sign Up</h1>
+  </head>
+  <body>
+    <section
+      class="flex items-center justify-center min-h-[calc(100vh-15rem)] py-12"
+    >
+      <form
+        action="/member/join"
+        method="post"
+        class="p-6 space-y-4 w-full max-w-md bg-white rounded-lg shadow"
+        onsubmit="
+          validateJoinForm(this);
+          return false;
+        "
+      >
+        <h1 class="text-2xl font-bold text-center">Sign Up</h1>
 
-    <!-- ID -->
-    <fieldset class="fieldset">
-        <legend class="fieldset-legend">아이디</legend>
-        <label class="input validator">
+        <!-- ID -->
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend">아이디</legend>
+          <label class="input w-full">
             <input
-                    type="text"
-                    placeholder="아이디를 입력해주세요"
-                    required
-                    pattern="[A-Za-z][A-Za-z0-9\-]*"
-                    minlength="3"
-                    maxlength="30"
-                    name="username"
+              type="text"
+              placeholder="아이디를 입력해주세요"
+              required
+              pattern="[A-Za-z][A-Za-z0-9\-]*"
+              minlength="3"
+              maxlength="30"
+              name="username"
             />
-        </label>
-    </fieldset>
+          </label>
+        </fieldset>
 
-    <!-- Password -->
-    <fieldset class="fieldset">
-        <legend class="fieldset-legend">비밀번호</legend>
-        <label class="input validator">
+        <!-- Password -->
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend">비밀번호</legend>
+          <label class="input w-full">
             <input
-                    type="password"
-                    required
-                    placeholder="비밀번호를 입력해주세요"
-                    minlength="8"
-                    pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-                    name="password"
+              type="password"
+              required
+              placeholder="비밀번호를 입력해주세요"
+              minlength="8"
+              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+              name="password"
             />
-        </label>
-    </fieldset>
+          </label>
+        </fieldset>
 
-    <!-- Confirm Password -->
-    <fieldset class="fieldset">
-        <legend class="fieldset-legend">비밀번호 확인</legend>
-        <label class="input validator">
+        <!-- Confirm Password -->
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend">비밀번호 확인</legend>
+          <label class="input w-full">
             <input
-                    type="password"
-                    required
-                    placeholder="비밀번호를 다시 입력해주세요"
-                    minlength="8"
-                    name="passwordConfirm"
+              type="password"
+              required
+              placeholder="비밀번호를 다시 입력해주세요"
+              minlength="8"
+              name="passwordConfirm"
             />
-        </label>
-    </fieldset>
+          </label>
+        </fieldset>
 
-    <!-- Email -->
-    <fieldset class="fieldset">
-        <legend class="fieldset-legend">이메일</legend>
-        <label class="input validator">
+        <!-- Email -->
+        <fieldset class="fieldset">
+          <legend class="fieldset-legend">이메일</legend>
+          <label class="input w-full">
             <input
-                    type="email"
-                    placeholder="이메일을 입력해주세요"
-                    required
-                    name="email"
+              type="email"
+              placeholder="이메일을 입력해주세요"
+              required
+              name="email"
             />
-        </label>
-    </fieldset>
+          </label>
+        </fieldset>
 
-    <!-- Submit -->
-    <button type="submit" class="btn btn-neutral w-full">가입</button>
+        <!-- Submit -->
+        <button type="submit" class="btn btn-neutral w-full">가입</button>
 
-    <!-- Divider -->
-    <div class="divider">OR</div>
+        <!-- Divider -->
+        <div class="divider">OR</div>
 
-    <!-- Social Login -->
-    <div class="space-y-2">
-        <a href="/oauth2/authorization/google" class="btn btn-outline w-full">
-            <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5 mr-2" alt="Google"/>
+        <!-- Social Login -->
+        <div class="space-y-2">
+          <a href="/oauth2/authorization/google" class="btn btn-outline w-full">
+            <img
+              src="https://www.svgrepo.com/show/475656/google-color.svg"
+              class="w-5 h-5 mr-2"
+              alt="Google"
+            />
             Google
-        </a>
-        <a href="/oauth2/authorization/kakao" class="btn w-full bg-yellow-400 text-black hover:bg-yellow-500">
-            <img src="https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png" class="w-5 h-5 mr-2" alt="Kakao"/>
+          </a>
+          <a
+            href="/oauth2/authorization/kakao"
+            class="btn w-full bg-yellow-400 text-black hover:bg-yellow-500"
+          >
+            <img
+              src="https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png"
+              class="w-5 h-5 mr-2"
+              alt="Kakao"
+            />
             Kakao
-        </a>
-    </div>
-</form>
+          </a>
+        </div>
+      </form>
 
-<script>
-    const form = document.querySelector("form");
-    form.addEventListener("submit", function(e) {
-      const pw = form.password.value;
-      const pwConfirm = form.passwordConfirm.value;
-      if (pw !== pwConfirm) {
-        e.preventDefault();
-        alert("비밀번호가 일치하지 않습니다.");
-      }
-    });
-</script>
-</body>
+      <script>
+        function validateJoinForm(form) {
+          form.username.value = form.username.value.trim();
+          if (form.username.value.length === 0) {
+            alert("아이디를 입력해주세요.");
+            form.username.focus();
+            return;
+          }
+
+          form.password.value = form.password.value.trim();
+          if (form.password.value.length === 0) {
+            alert("비밀번호를 입력해주세요.");
+            form.password.focus();
+            return;
+          }
+
+          form.passwordConfirm.value = form.passwordConfirm.value.trim();
+          if (form.passwordConfirm.value.length === 0) {
+            alert("비밀번호 확인을 입력해주세요.");
+            form.passwordConfirm.focus();
+            return;
+          }
+
+          form.email.value = form.email.value.trim();
+          if (form.email.value.length === 0) {
+            alert("이메일을 입력해주세요.");
+            form.email.focus();
+            return;
+          }
+
+          form.submit();
+        }
+      </script>
+    </section>
+  </body>
 </html>
