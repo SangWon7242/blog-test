@@ -46,9 +46,8 @@ public class SecurityConfig {
             .loginPage("/member/login")
             .loginProcessingUrl("/member/login")
             .defaultSuccessUrl("/")
-            .permitAll()
-        ).oauth2Login(Customizer.withDefaults()
-        ).logout(logout -> logout
+            .permitAll())
+        .oauth2Login(Customizer.withDefaults()).logout(logout -> logout
             .logoutUrl("/member/logout")
             .logoutSuccessUrl("/")
             .permitAll())
